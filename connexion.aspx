@@ -30,13 +30,22 @@
             <!-- CONTENU DE LA PAGE -->
             <div id="contenu">
                 <hr />
-                <asp:Label ID="Label1" runat="server" Text="Authentification" Font-Size="Medium" style="z-index: 1; left: 30px; top: 120px; position: absolute"></asp:Label>
+                <asp:Label ID="NomPage" runat="server" Text="Authentification" Font-Size="Medium" style="z-index: 1; top: 120px; position: absolute"></asp:Label>
                 <br /><br /><br /><br /><br />
-                <asp:Label ID="lb_util" runat="server" Text="Utilisateur"></asp:Label><asp:TextBox ID="tb_util" runat="server" AutoPostBack="true" OnTextChanged="tb_util_TextChanged"></asp:TextBox><br /><br />
-                <asp:Label ID="lb_mdp" runat="server" Text="Mot de passe"></asp:Label><asp:TextBox ID="tb_mdp" runat="server" AutoPostBack="true" OnTextChanged="tb_mdp_TextChanged"></asp:TextBox><br /><br />
-
-                <asp:Button ID="bt_annul" runat="server" Text="Annuler" OnClick="bt_annul_Click" />  <asp:Button ID="bt_valid" runat="server" Text="Valider" OnClick="bt_valid_Click" />
-
+				<table style="width:50%">
+				  <tr>
+					<td><asp:Label ID="lb_util" runat="server" Text="Utilisateur"></asp:Label></td>
+					<td><asp:TextBox ID="tb_util" runat="server" AutoPostBack="true" OnTextChanged="tb_util_TextChanged"></asp:TextBox></td> 
+				  </tr>
+				  <tr class="spaceUnder">
+					<td><asp:Label ID="lb_mdp" runat="server" Text="Mot de passe"></asp:Label></td>
+					<td><asp:TextBox ID="tb_mdp" runat="server" AutoPostBack="true" OnTextChanged="tb_mdp_TextChanged"></asp:TextBox></td> 
+				  </tr>
+				  <tr>
+					<td></td>
+					<td><asp:Button ID="bt_annul" runat="server" Text="Annuler" OnClick="bt_annul_Click" />  <asp:Button ID="bt_valid" runat="server" Text="Valider" OnClick="bt_valid_Click" /></td> 
+				  </tr>
+				</table>
             </div>
             <!-- PIED DE LA PAGE -->
             <div id="pied">

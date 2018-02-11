@@ -9,6 +9,10 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if((Session["utilisateurEnCours"] == null))
+        {
+            Response.Redirect("./accueil.aspx");
+        }
     }
 
     protected void lb_clic_liens(object sender, CommandEventArgs e)
@@ -31,6 +35,7 @@ public partial class _Default : System.Web.UI.Page
 
     protected void clic_button(object sender, EventArgs e)
     {
+        Session.Remove("utilisateurEnCours");
         Response.Redirect("./accueil.aspx");
     }
 }

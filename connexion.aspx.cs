@@ -33,8 +33,7 @@ public partial class connexion : System.Web.UI.Page
         {
             if (tb_mdp.Text == "Lulu38000")
             {
-                Session["password"] = tb_mdp.Text;
-                Session["util"] = tb_util.Text;
+                Session["utilisateurEnCours"] = tb_util.Text;
                 Response.Redirect("./menu.aspx");
             }
             else
