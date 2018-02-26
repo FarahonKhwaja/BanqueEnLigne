@@ -23,7 +23,7 @@
 				<div id="padding">
 					<asp:Label ID="Label3" runat="server" Text="Menu Principal" Font-Size="Medium"></asp:Label>
 					<br /><br />
-					Bonjour <%:Session["utilisateurEnCours"]%>
+					Bonjour <%:Session["user"]%>
 					<br /><br />
 					<asp:LinkButton ID="lb_compte_courant" runat="server" OnCommand="lb_clic_liens" CommandName="bt_cpt_courant">Compte courant</asp:LinkButton> 
 					<asp:Label ID="lb_modif" runat="server" Text=""></asp:Label>

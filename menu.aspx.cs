@@ -9,7 +9,7 @@ public partial class _Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        if((Session["utilisateurEnCours"] == null))
+        if((Session["user"] == null))
         {
             Response.Redirect("./accueil.aspx");
         }
@@ -35,7 +35,7 @@ public partial class _Default : System.Web.UI.Page
 
     protected void clic_button(object sender, EventArgs e)
     {
-        Session.Remove("utilisateurEnCours");
+        Session.Remove("user");
         Response.Redirect("./accueil.aspx");
     }
 }
