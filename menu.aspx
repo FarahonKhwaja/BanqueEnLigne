@@ -32,6 +32,11 @@
 					<br /><br />
 					<asp:LinkButton ID="lb_ope" runat="server" OnCommand="lb_clic_liens" CommandName="bt_operation">Opération</asp:LinkButton>
 				</div>
+                <div style="clear:both"></div>
+                <div>
+                    <asp:GridView ID="GridViewCompteCourant" runat="server" style="z-index: 1; left: 150px; top: 200px; position: absolute"></asp:GridView>
+                </div>
+
             </div>
             <!-- PIED DE LA PAGE -->
             <div id="pied">

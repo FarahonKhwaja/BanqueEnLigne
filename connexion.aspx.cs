@@ -49,7 +49,7 @@ public partial class connexion : System.Web.UI.Page
         String encryptedPass = pm.EncryptData(tb_mdp.Text);
         System.Diagnostics.Debug.WriteLine("Encrypted Pass : " + encryptedPass);
 
-        using (SqlConnection con = new SqlConnection("Data Source = LAPTOP-OD5VHO5I\\SQLEXPRESS; Initial Catalog = bd1; User ID = lucas; Password = azert170794"))
+        using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
         {
             using (SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM UTILISATEUR WHERE LOGIN = @login AND PASSWD = @mdp", con))
             {
