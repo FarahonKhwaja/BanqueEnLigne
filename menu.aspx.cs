@@ -15,6 +15,24 @@ public partial class _Default : System.Web.UI.Page
         {
             Response.Redirect("./accueil.aspx");
         }
+        if (Session["NoCpt"] != null)
+        {
+            using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
+            {
+                // ouverture
+                con.Open();
+                // ordre SQL
+                SqlCommand commande = new SqlCommand("SELECT Lib AS 'Libellé', DtOpe AS 'Date', TypO AS 'Type', Mnt AS 'Montant' FROM OPERATION WHERE NoCpt =" + Session["NoCpt"].ToString(), con);
+
+                // exécution
+                SqlDataAdapter da = new SqlDataAdapter(commande);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                GridViewCompteCourant.DataSource = dt;
+                GridViewCompteCourant.DataBind();
+                con.Close();
+            }
+        }
     }
 
     protected void lb_clic_liens(object sender, CommandEventArgs e)
@@ -25,8 +43,18 @@ public partial class _Default : System.Web.UI.Page
                 lb_modif.Text = "Sélection compte épargne";
                 using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
                 {
+                    // ouverture
+                    con.Open();
+                    // ordre SQL
+                    SqlCommand commande = new SqlCommand("SELECT COMPTE.NoCpt AS 'Numéro de compte', Typ AS 'Type de compte épargne', Sld AS 'Solde du compte' FROM COMPTE, CPT_EPARGNE WHERE COMPTE.NoCpt = CPT_EPARGNE.NoCpt", con);
 
-
+                    // exécution
+                    SqlDataAdapter da = new SqlDataAdapter(commande);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    GridViewCompteCourant.DataSource = dt;
+                    GridViewCompteCourant.DataBind();
+                    con.Close();
                 }
                 break;
             case "bt_cpt_courant":
@@ -44,16 +72,12 @@ public partial class _Default : System.Web.UI.Page
                     da.Fill(dt);
                     GridViewCompteCourant.DataSource = dt;
                     GridViewCompteCourant.DataBind();
-
+                    con.Close();
                 }
                 break;
             case "bt_operation":
                 lb_modif.Text = "Sélection opération";
-                using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
-                {
-
-
-                }
+                Response.Redirect("./choix.aspx");
                 break;
             default:
                 break;
