@@ -31,7 +31,9 @@
             <div id="contenu">
                 <hr />
                 <asp:Label ID="NomPage" runat="server" Text="Authentification" Font-Size="Medium" style="z-index: 1; top: 120px; position: absolute"></asp:Label>
-                <br /><br /><br /><br /><br />
+                <br />
+                <br />
+                <br /><br /><br />
 				<table style="width:50%">
 				  <tr>
 					<td><asp:Label ID="lb_util" runat="server" Text="Utilisateur"></asp:Label></td>

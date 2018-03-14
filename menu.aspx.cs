@@ -43,17 +43,32 @@ public partial class _Default : System.Web.UI.Page
                 lb_modif.Text = "Sélection compte épargne";
                 using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
                 {
-                    // ouverture
-                    con.Open();
-                    // ordre SQL
-                    SqlCommand commande = new SqlCommand("SELECT COMPTE.NoCpt AS 'Numéro de compte', Typ AS 'Type de compte épargne', Sld AS 'Solde du compte' FROM COMPTE, CPT_EPARGNE WHERE COMPTE.NoCpt = CPT_EPARGNE.NoCpt", con);
+                    using (SqlCommand cmd = new SqlCommand("SELECT CPT_EPARGNE.NoCpt AS 'Numéro du compte', Sld AS 'Solde'" +
+                                                           " FROM CPT_EPARGNE, UTILISATEUR, COMPTE" +
+                                                           " WHERE CPT_EPARGNE.NoCpt = COMPTE.NoCpt" +
+                                                           " AND COMPTE.NoCli = UTILISATEUR.NoCli" +
+                                                           " AND UTILISATEUR.LOGIN = @login", con))
+                    {
+                        con.Open();
+                        cmd.Parameters.AddWithValue("@login", Session["user"]);
+                        var count = cmd.ExecuteScalar();
 
-                    // exécution
-                    SqlDataAdapter da = new SqlDataAdapter(commande);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    GridViewCompteCourant.DataSource = dt;
-                    GridViewCompteCourant.DataBind();
+                        System.Diagnostics.Debug.WriteLine("nb lignes " + count + "user : " + Session["user"]);
+
+                        if (count != null)
+                        {
+                            // exécution
+                            SqlDataAdapter da = new SqlDataAdapter(cmd);
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+                            GridViewCompteCourant.DataSource = dt;
+                            GridViewCompteCourant.DataBind();
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("KO");
+                        }
+                    }
                     con.Close();
                 }
                 break;
@@ -61,17 +76,32 @@ public partial class _Default : System.Web.UI.Page
                 lb_modif.Text = "Sélection compte courant";
                 using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
                 {
-                    // ouverture
-                    con.Open();
-                    // ordre SQL
-                    SqlCommand commande = new SqlCommand("SELECT COMPTE.NoCpt AS 'Numéro de compte', Sld AS 'Solde du compte' FROM COMPTE, CPT_COURANT WHERE COMPTE.NoCpt = CPT_COURANT.NoCpt", con);
-                    
-                    // exécution
-                    SqlDataAdapter da = new SqlDataAdapter(commande);
-                    DataTable dt = new DataTable();
-                    da.Fill(dt);
-                    GridViewCompteCourant.DataSource = dt;
-                    GridViewCompteCourant.DataBind();
+                    using (SqlCommand cmd = new SqlCommand("SELECT CPT_COURANT.NoCpt AS 'Numéro du compte', Sld AS 'Solde'" +
+                                                           " FROM CPT_COURANT, UTILISATEUR, COMPTE" +
+                                                           " WHERE CPT_COURANT.NoCpt = COMPTE.NoCpt" +
+                                                           " AND COMPTE.NoCli = UTILISATEUR.NoCli" +
+                                                           " AND UTILISATEUR.LOGIN = @login", con))
+                    {
+                        con.Open();
+                        cmd.Parameters.AddWithValue("@login", Session["user"]);
+                        var count = cmd.ExecuteScalar();
+                        System.Diagnostics.Debug.WriteLine("RQ : " + cmd.CommandText);
+                        System.Diagnostics.Debug.WriteLine("nb lignes " + count + "user : " + Session["user"]);
+
+                        if (count != null)
+                        {
+                            // exécution
+                            SqlDataAdapter dataAdap = new SqlDataAdapter(cmd);
+                            DataTable datatab = new DataTable();
+                            dataAdap.Fill(datatab);
+                            GridViewCompteCourant.DataSource = datatab;
+                            GridViewCompteCourant.DataBind();
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("KO");
+                        }
+                    }
                     con.Close();
                 }
                 break;

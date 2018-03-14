@@ -15,14 +15,17 @@ public partial class choix : System.Web.UI.Page
             // ouverture
             con.Open();
             // ordre SQL
-            SqlCommand commande = new SqlCommand("SELECT NoCpt FROM COMPTE", con);
-
-            // exécution
-            SqlDataReader reader = commande.ExecuteReader();
-            // lecture des lignes
-            while (reader.Read())
-                DropDownList1.Items.Add(new ListItem(reader.GetDecimal(0).ToString()));
-            reader.Close();
+            using (SqlCommand commande = new SqlCommand("SELECT NoCpt FROM COMPTE, UTILISATEUR WHERE UTILISATEUR.LOGIN = @login AND UTILISATEUR.NoCli = COMPTE.NoCli", con))
+            {
+                commande.Parameters.AddWithValue("@login", Session["user"]);
+                // exécution
+                SqlDataReader reader = commande.ExecuteReader();
+                // lecture des lignes
+                while (reader.Read())
+                    DropDownList1.Items.Add(new ListItem(reader.GetDecimal(0).ToString()));
+                reader.Close();
+               
+            }
             // fermeture
             con.Close();
         }
