@@ -43,7 +43,7 @@ public partial class _Default : System.Web.UI.Page
                 lb_modif.Text = "Sélection compte épargne";
                 using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
                 {
-                    using (SqlCommand cmd = new SqlCommand("SELECT CPT_EPARGNE.NoCpt AS 'Numéro du compte', Sld AS 'Solde'" +
+                    using (SqlCommand cmd = new SqlCommand("SELECT CPT_EPARGNE.NoCpt AS 'Numéro du compte', Sld AS 'Solde', REPLACE(REPLACE(REPLACE(CPT_EPARGNE.Typ, 'LVA', 'Livret A'), 'LDDS', 'Livret de développement durable et solidaire'), 'LEP', 'Livret d epargne populaire') AS 'Type'" +
                                                            " FROM CPT_EPARGNE, UTILISATEUR, COMPTE" +
                                                            " WHERE CPT_EPARGNE.NoCpt = COMPTE.NoCpt" +
                                                            " AND COMPTE.NoCli = UTILISATEUR.NoCli" +
@@ -52,7 +52,7 @@ public partial class _Default : System.Web.UI.Page
                         con.Open();
                         cmd.Parameters.AddWithValue("@login", Session["user"]);
                         var count = cmd.ExecuteScalar();
-
+                        System.Diagnostics.Debug.WriteLine(cmd.CommandText);
                         System.Diagnostics.Debug.WriteLine("nb lignes " + count + "user : " + Session["user"]);
 
                         if (count != null)
