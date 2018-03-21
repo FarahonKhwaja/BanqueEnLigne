@@ -110,12 +110,16 @@ public partial class _Default : System.Web.UI.Page
                 Response.Redirect("./choix.aspx");
                 break;
             case "bt_debit":
-                lb_modif.Text = "Sélection opération";
+                lb_modif.Text = "Sélection débit";
                 Response.Redirect("./debit.aspx");
                 break;
             case "bt_credit":
+                lb_modif.Text = "Sélection crédit";
+                Response.Redirect("./credit.aspx");
                 break;
             case "bt_virer":
+                lb_modif.Text = "Sélection virer";
+                Response.Redirect("./virer.aspx");
                 break;
             default:
                 break;

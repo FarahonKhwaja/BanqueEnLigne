@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="Debit.aspx.cs" Inherits="Debit" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="credit.aspx.cs" Inherits="credit" %>
 
 
 <!DOCTYPE html>
@@ -22,13 +22,13 @@
             <div id="contenu">
                 <hr />
 				<div id="padding">
-					<asp:Label ID="Label3" runat="server" Text="Débiter" Font-Size="Medium"></asp:Label>
+					<asp:Label ID="Label3" runat="server" Text="Créditer" Font-Size="Medium"></asp:Label>
 					<br /><br />
-					Compte à débiter : <asp:DropDownList ID="DropDownList1" runat="server" Height="24px" Width="130px"></asp:DropDownList>
+					Compte à créditer : <asp:DropDownList ID="DropDownList2" runat="server" OnSelectedIndexChanged="DropDownList2_SelectedIndexChanged"></asp:DropDownList>
 					<br /><br />
-					Montant à débiter : <asp:TextBox ID="tbMontantDebit" runat="server"></asp:TextBox>
+					Montant à créditer : <asp:TextBox id="tb1" runat="server" OnTextChanged="tb1_TextChanged" />
                     <br /><br />
-                    <asp:Button ID="Button1" runat="server" OnClick="btValiderDebit_Click" Text="Valider" style="height: 26px"  />
+					<asp:Button ID="Button2" runat="server" Text="Valider" OnClick="bt_valid_Click" style="height: 26px" />
 				</div>
             </div>
             <!-- PIED DE LA PAGE -->
