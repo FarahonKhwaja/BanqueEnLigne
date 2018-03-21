@@ -18,11 +18,17 @@ public partial class choix : System.Web.UI.Page
             using (SqlCommand commande = new SqlCommand("SELECT NoCpt FROM COMPTE, UTILISATEUR WHERE UTILISATEUR.LOGIN = @login AND UTILISATEUR.NoCli = COMPTE.NoCli", con))
             {
                 commande.Parameters.AddWithValue("@login", Session["user"]);
+
+                System.Diagnostics.Debug.WriteLine("1");
+
                 // exécution
                 SqlDataReader reader = commande.ExecuteReader();
                 // lecture des lignes
-                while (reader.Read())
+                while (reader.Read()){
+                    System.Diagnostics.Debug.WriteLine("2");
                     DropDownList1.Items.Add(new ListItem(reader.GetDecimal(0).ToString()));
+                }
+                    
                 reader.Close();
                
             }
