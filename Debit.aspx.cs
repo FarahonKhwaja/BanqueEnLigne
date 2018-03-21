@@ -32,11 +32,22 @@ public partial class Debit : System.Web.UI.Page
         Double value = 0.0;
         Double.TryParse(tbMontantDebit.Text, out value);
         String cpt = DropDownList1.SelectedValue;
-
-        using (SqlCommand commande = new SqlCommand("INSERT INTO OPERATION(LIB, DtOpe, TypO, Mnt, NoCpt, NoCli) " +
-                                                   "VALUES ('débit du compte n°" + cpt + "', SYSDATETIME(), 'D', " + value + ","))
+        Decimal noCli;
+        using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
         {
-
+            con.Open();
+            using (SqlCommand commande = new SqlCommand("SELECT NoCli FROM UTILISATEUR WHERE LOGIN = @login", con))
+            {
+                commande.Parameters.AddWithValue("@login", Session["user"]);
+                noCli = (Decimal)commande.ExecuteScalar();
+            }
+            SqlCommand cmd = new SqlCommand("INSERT INTO OPERATION(LIB, DtOpe, TypO, Mnt, NoCpt, NoCli) " +
+                                            "VALUES ('débit du compte n°" + cpt + "', SYSDATETIME(), 'D', " + value +
+                                            "," + cpt + "," + noCli + ")", con);
+            int nbLignes = cmd.ExecuteNonQuery();
+            System.Diagnostics.Debug.WriteLine("nb lignes : " + nbLignes);
+            con.Close();
         }
+        Response.Redirect("./accueil.aspx");
     }
 }
