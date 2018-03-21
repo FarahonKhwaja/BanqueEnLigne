@@ -24,6 +24,8 @@
 					<asp:Label ID="Label3" runat="server" Text="Menu Principal" Font-Size="Medium"></asp:Label>
 					<br /><br />
 					Bonjour <%:Session["user"]%>
+
+                    ALL SESSION : <%:foreach(String ss in Session) { Response.Write(ss); }%>
 					<br /><br />
 					<asp:LinkButton ID="lb_compte_courant" runat="server" OnCommand="lb_clic_liens" CommandName="bt_cpt_courant">Compte courant</asp:LinkButton> 
 					<asp:Label ID="lb_modif" runat="server" Text=""></asp:Label>
@@ -31,10 +33,17 @@
 					<asp:LinkButton ID="lb_compte_epargne" runat="server" OnCommand="lb_clic_liens" CommandName="bt_cpt_epargne">Compte épargne</asp:LinkButton>
 					<br /><br />
 					<asp:LinkButton ID="lb_ope" runat="server" OnCommand="lb_clic_liens" CommandName="bt_operation">Opération</asp:LinkButton>
-				</div>
+				    <br />
+                    <br />
+                    <asp:LinkButton ID="lb_deb" runat="server" OnCommand="lb_clic_liens" CommandName="bt_debit">Débiter</asp:LinkButton><br />
+                    <br />
+                    <asp:LinkButton ID="lb_cred" runat="server" OnCommand="lb_clic_liens" CommandName="bt_credit">Créditer</asp:LinkButton><br />
+                    <br />
+                    <asp:LinkButton ID="lb_vir" runat="server" OnCommand="lb_clic_liens" CommandName="bt_virer">Effectuer <br />un virement</asp:LinkButton><br />
+                    </div>
                 <div style="clear:both"></div>
                 <div>
-                    <asp:GridView ID="GridViewCompteCourant" runat="server" style="z-index: 1; left: 150px; top: 200px; position: absolute"></asp:GridView>
+                    <asp:GridView ID="GridViewCompteCourant" runat="server" style="z-index: 1; left: 207px; top: 202px; position: absolute"></asp:GridView>
                 </div>
 
             </div>

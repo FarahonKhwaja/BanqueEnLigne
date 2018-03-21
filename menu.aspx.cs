@@ -109,6 +109,14 @@ public partial class _Default : System.Web.UI.Page
                 lb_modif.Text = "Sélection opération";
                 Response.Redirect("./choix.aspx");
                 break;
+            case "bt_debit":
+                lb_modif.Text = "Sélection opération";
+                Response.Redirect("./debit.aspx");
+                break;
+            case "bt_credit":
+                break;
+            case "bt_virer":
+                break;
             default:
                 break;
         }
