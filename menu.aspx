@@ -24,8 +24,6 @@
 					<asp:Label ID="Label3" runat="server" Text="Menu Principal" Font-Size="Medium"></asp:Label>
 					<br /><br />
 					Bonjour <%:Session["user"]%>
-
-                    ALL SESSION : <%:foreach(String ss in Session) { Response.Write(ss); }%>
 					<br /><br />
 					<asp:LinkButton ID="lb_compte_courant" runat="server" OnCommand="lb_clic_liens" CommandName="bt_cpt_courant">Compte courant</asp:LinkButton> 
 					<asp:Label ID="lb_modif" runat="server" Text=""></asp:Label>
