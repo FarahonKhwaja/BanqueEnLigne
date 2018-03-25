@@ -44,10 +44,24 @@ public partial class Debit : System.Web.UI.Page
             SqlCommand cmd = new SqlCommand("INSERT INTO OPERATION(LIB, DtOpe, TypO, Mnt, NoCpt, NoCli) " +
                                             "VALUES ('débit du compte n°" + cpt + "', SYSDATETIME(), 'D', " + value +
                                             "," + cpt + "," + noCli + ")", con);
-            int nbLignes = cmd.ExecuteNonQuery();
+            int nbLignes = 0;
+            nbLignes = cmd.ExecuteNonQuery();
+            cmd = new SqlCommand("SELECT Sld FROM COMPTE WHERE NoCpt = '" + cpt + "'", con);
+            Decimal solde = (Decimal)cmd.ExecuteScalar();
+
+            solde -= (Decimal)value;
+            cmd = new SqlCommand("UPDATE COMPTE SET Sld = '" + solde + "' WHERE NoCpt = " + cpt, con);
+            System.Diagnostics.Debug.WriteLine("CMD : " + cmd);
+            try
+            {
+                nbLignes = cmd.ExecuteNonQuery();
+            } catch(SqlException se)
+            {
+                System.Diagnostics.Debug.WriteLine("SE : " + se.ToString());
+            }
             System.Diagnostics.Debug.WriteLine("nb lignes : " + nbLignes);
             con.Close();
         }
-        Response.Redirect("./accueil.aspx");
+        Response.Redirect("./menu.aspx");
     }
 }

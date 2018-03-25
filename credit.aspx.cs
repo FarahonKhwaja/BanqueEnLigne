@@ -45,6 +45,38 @@ public partial class credit : System.Web.UI.Page
 
     protected void bt_valid_Click(object sender, EventArgs e)
     {
-
+        Double value = 0.0;
+        Double.TryParse(tb1.Text, out value);
+        String cpt = DropDownList2.SelectedValue;
+        Decimal noCli;
+        using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
+        {
+            con.Open();
+            using (SqlCommand commande = new SqlCommand("SELECT NoCli FROM UTILISATEUR WHERE LOGIN = @login", con))
+            {
+                commande.Parameters.AddWithValue("@login", Session["user"]);
+                noCli = (Decimal)commande.ExecuteScalar();
+            }
+            SqlCommand cmd = new SqlCommand("INSERT INTO OPERATION(LIB, DtOpe, TypO, Mnt, NoCpt, NoCli) " +
+                                            "VALUES ('crédit du compte n°" + cpt + "', SYSDATETIME(), 'C', " + value +
+                                            "," + cpt + "," + noCli + ")", con);
+            int nbLignes = 0;
+            nbLignes = cmd.ExecuteNonQuery();
+            cmd = new SqlCommand("SELECT Sld FROM COMPTE WHERE NoCpt = '" + cpt + "'", con);
+            Decimal solde = (Decimal)cmd.ExecuteScalar();
+            cmd = new SqlCommand("UPDATE COMPTE SET Sld = '" + (solde + (Decimal)value) + "' WHERE NoCpt = '" + cpt + "'", con);
+            System.Diagnostics.Debug.WriteLine("CMD : " + cmd.ToString());
+            try
+            {
+                nbLignes += cmd.ExecuteNonQuery();
+            }
+            catch (SqlException se)
+            {
+                System.Diagnostics.Debug.WriteLine("SE : " + se.ToString());
+            }
+            System.Diagnostics.Debug.WriteLine("nb lignes : " + nbLignes);
+            con.Close();
+        }
+        Response.Redirect("./menu.aspx");
     }
 }
