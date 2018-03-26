@@ -10,6 +10,23 @@
 <body>
     <form id="form1" runat="server">
         <div>
+            Choisissez un compte à débiter :
+            <br />
+            <asp:DropDownList ID="ddl_debiter" runat="server">
+            </asp:DropDownList>
+            <br />
+            <br />
+            Choisissez un compte à créditer :<br />
+            <asp:DropDownList ID="ddl_crediter" runat="server">
+            </asp:DropDownList>
+            <br />
+            <br />
+            Choisissez le montant :
+            <br />
+            <asp:TextBox ID="tb_montant" runat="server"></asp:TextBox>
+            <br />
+            <br />
+            <asp:Button ID="bt_valider" runat="server" OnClick="bt_valider_Click" Text="Valider" />
         </div>
     </form>
 </body>
