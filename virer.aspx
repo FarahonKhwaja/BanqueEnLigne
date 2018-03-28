@@ -21,7 +21,11 @@
                 <hr />
 				<div id="padding">
 					<asp:Label ID="Label3" runat="server" Text="Virer" Font-Size="Medium"></asp:Label>
-					<br /><br />
+					<br />
+                    <br />
+                    <asp:Label ID="lb_erreur" runat="server" Visible="False"></asp:Label>
+                    <br />
+                    <br />
                     Choisissez un compte à débiter : <asp:DropDownList ID="ddl_debiter" runat="server"></asp:DropDownList>
 					<br /><br />
 					Choisissez un compte à créditer : <asp:DropDownList ID="ddl_crediter" runat="server"></asp:DropDownList>

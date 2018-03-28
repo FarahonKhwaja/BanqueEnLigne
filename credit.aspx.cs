@@ -50,7 +50,7 @@ public partial class credit : System.Web.UI.Page
         String cpt = DropDownList2.SelectedValue;
         Decimal noCli;
 
-        if(value < 0)
+        if (value < 0)
         {
             System.Diagnostics.Debug.WriteLine("Le montant doit être positif");
             Response.Redirect("./credit.aspx");

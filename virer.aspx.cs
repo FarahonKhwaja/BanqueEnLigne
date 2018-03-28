@@ -37,73 +37,88 @@ public partial class virer : System.Web.UI.Page
         Double value = 0.0;
         Double.TryParse(tb_montant.Text, out value);
         String cpt = ddl_debiter.SelectedValue;
-        Decimal noCli;
+        Decimal noCliDeb = 0;
+        Decimal noCliCre = 0;
+        int nbLignes = 0;
 
-        //DEBITER
+        if (value < 0)
+        {
+            lb_erreur.Visible = true;
+            lb_erreur.ForeColor = System.Drawing.Color.Red;
+            lb_erreur.Text = "Le montant doit être positif";
+            return;
+        }
+
+
         using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
         {
             con.Open();
-            using (SqlCommand commande = new SqlCommand("SELECT NoCli FROM UTILISATEUR WHERE LOGIN = @login", con))
-            {
-                commande.Parameters.AddWithValue("@login", Session["user"]);
-                noCli = (Decimal)commande.ExecuteScalar();
-            }
-            SqlCommand cmd = new SqlCommand("INSERT INTO OPERATION(LIB, DtOpe, TypO, Mnt, NoCpt, NoCli) " +
-                                            "VALUES ('débit du compte n°" + cpt + "', SYSDATETIME(), 'D', " + value +
-                                            "," + cpt + "," + noCli + ")", con);
-            int nbLignes = 0;
-            nbLignes = cmd.ExecuteNonQuery();
-            cmd = new SqlCommand("SELECT Sld FROM COMPTE WHERE NoCpt = '" + cpt + "'", con);
-            Decimal solde = (Decimal)cmd.ExecuteScalar();
 
-            solde -= (Decimal)value;
-            cmd = new SqlCommand("UPDATE COMPTE SET Sld = '" + solde + "' WHERE NoCpt = " + cpt, con);
-            System.Diagnostics.Debug.WriteLine("CMD : " + cmd);
+            //CONTROLES SOLDE DU COMPTE
+            //S'ASSURER QUE L'OPERATION EST POSSIBLE
+
+
+
+            SqlTransaction trs = con.BeginTransaction();
+            SqlCommand com = con.CreateCommand();
+            com.Transaction = trs;
             try
             {
-                nbLignes = cmd.ExecuteNonQuery();
+                //débiter
+                com.CommandText = "SELECT NoCli FROM UTILISATEUR WHERE LOGIN = '" + Session["user"] + "'";
+                noCliDeb = (Decimal)com.ExecuteScalar();
+                com.CommandText = "INSERT INTO OPERATION(LIB, DtOpe, TypO, Mnt, NoCpt, NoCli) " +
+                                                "VALUES ('débit du compte n°" + cpt + "', SYSDATETIME(), 'D', " + value +
+                                                "," + cpt + "," + noCliDeb + ")";
+                nbLignes = com.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine("[DEBIT] INSERT : " + nbLignes);
+                com.CommandText = "SELECT Sld FROM COMPTE WHERE NoCpt = '" + cpt + "'";
+                Decimal solde = (Decimal)com.ExecuteScalar();
+                System.Diagnostics.Debug.WriteLine("[DEBIT] SOLDE : " + solde);
+                Decimal soldeDeb = solde - ((Decimal)value * -1);
+                com.CommandText = "UPDATE COMPTE SET Sld = " + Double.Parse(solde.ToString()) + " WHERE NoCpt = " + cpt;
+                System.Diagnostics.Debug.WriteLine("COM : " + com.CommandText);
+                nbLignes = com.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine("[DEBIT] UDPDATE : " + nbLignes);
+
+                //créditer
+                cpt = ddl_crediter.SelectedValue;
+                com.CommandText = "SELECT NoCli FROM UTILISATEUR WHERE LOGIN = '" + Session["user"] + "'";
+                noCliCre = (Decimal)com.ExecuteScalar();
+                com.CommandText = "INSERT INTO OPERATION(LIB, DtOpe, TypO, Mnt, NoCpt, NoCli) " +
+                                       "VALUES ('crédit du compte n°" + cpt + "', SYSDATETIME(), 'C', " + value +
+                                       "," + cpt + "," + noCliCre + ")";
+                nbLignes = com.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine("[CREDIT] INSERT : " + nbLignes);
+                com.CommandText = "SELECT Sld FROM COMPTE WHERE NoCpt = '" + cpt + "'";
+                solde = (Decimal)com.ExecuteScalar();
+                System.Diagnostics.Debug.WriteLine("[CREDIT] SOLDE : " + nbLignes);
+                solde += (Decimal)value;
+                com.CommandText = "UPDATE COMPTE SET Sld = " + Double.Parse(solde.ToString()) + " WHERE NoCpt = '" + cpt + "'";
+                nbLignes = com.ExecuteNonQuery();
+                System.Diagnostics.Debug.WriteLine("[CREDIT] UPDATE : " + nbLignes);
+
+                trs.Commit();
             }
-            catch (SqlException se)
+            catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("SE : " + se.ToString());
+                System.Diagnostics.Debug.WriteLine("exception : " + ex.Message);
+                lb_erreur.Visible = true;
+                lb_erreur.Text = ex.Message;
+                try
+                {
+                    trs.Rollback();
+                }
+                catch (Exception rollbackex)
+                {
+                    lb_erreur.Text = rollbackex.Message;
+                    System.Diagnostics.Debug.WriteLine("rollback exception : " + ex.Message);
+                }
             }
-            System.Diagnostics.Debug.WriteLine("nb lignes : " + nbLignes);
+
             con.Close();
         }
 
-        //CREDITER
-        value = 0.0;
-        Double.TryParse(tb_montant.Text, out value);
-        cpt = ddl_crediter.SelectedValue;
-        noCli = 0;
-        using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
-        {
-            con.Open();
-            using (SqlCommand commande = new SqlCommand("SELECT NoCli FROM UTILISATEUR WHERE LOGIN = @login", con))
-            {
-                commande.Parameters.AddWithValue("@login", Session["user"]);
-                noCli = (Decimal)commande.ExecuteScalar();
-            }
-            SqlCommand cmd = new SqlCommand("INSERT INTO OPERATION(LIB, DtOpe, TypO, Mnt, NoCpt, NoCli) " +
-                                            "VALUES ('crédit du compte n°" + cpt + "', SYSDATETIME(), 'C', " + value +
-                                            "," + cpt + "," + noCli + ")", con);
-            int nbLignes = 0;
-            nbLignes = cmd.ExecuteNonQuery();
-            cmd = new SqlCommand("SELECT Sld FROM COMPTE WHERE NoCpt = '" + cpt + "'", con);
-            Decimal solde = (Decimal)cmd.ExecuteScalar();
-            cmd = new SqlCommand("UPDATE COMPTE SET Sld = '" + (solde + (Decimal)value) + "' WHERE NoCpt = '" + cpt + "'", con);
-            System.Diagnostics.Debug.WriteLine("CMD : " + cmd.ToString());
-            try
-            {
-                nbLignes += cmd.ExecuteNonQuery();
-            }
-            catch (SqlException se)
-            {
-                System.Diagnostics.Debug.WriteLine("SE : " + se.ToString());
-            }
-            System.Diagnostics.Debug.WriteLine("nb lignes : " + nbLignes);
-            con.Close();
-        }
         Response.Redirect("./menu.aspx");
     }
 }
