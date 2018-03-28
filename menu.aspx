@@ -37,7 +37,7 @@
                     <br />
                     <asp:LinkButton ID="lb_cred" runat="server" OnCommand="lb_clic_liens" CommandName="bt_credit">Créditer</asp:LinkButton><br />
                     <br />
-                    <asp:LinkButton ID="lb_vir" runat="server" OnCommand="lb_clic_liens" CommandName="bt_virer">Effectuer <br />un virement</asp:LinkButton><br />
+                    <asp:LinkButton ID="lb_vir" runat="server" OnCommand="lb_clic_liens" CommandName="bt_virer">Virer</asp:LinkButton><br />
                     </div>
                 <div style="clear:both"></div>
                 <div>
