@@ -49,6 +49,12 @@ public partial class credit : System.Web.UI.Page
         Double.TryParse(tb1.Text, out value);
         String cpt = DropDownList2.SelectedValue;
         Decimal noCli;
+
+        if(value < 0)
+        {
+            System.Diagnostics.Debug.WriteLine("Le montant doit être positif");
+            Response.Redirect("./credit.aspx");
+        }
         using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
         {
             con.Open();
@@ -64,8 +70,9 @@ public partial class credit : System.Web.UI.Page
             nbLignes = cmd.ExecuteNonQuery();
             cmd = new SqlCommand("SELECT Sld FROM COMPTE WHERE NoCpt = '" + cpt + "'", con);
             Decimal solde = (Decimal)cmd.ExecuteScalar();
-            cmd = new SqlCommand("UPDATE COMPTE SET Sld = '" + (solde + (Decimal)value) + "' WHERE NoCpt = '" + cpt + "'", con);
-            System.Diagnostics.Debug.WriteLine("CMD : " + cmd.ToString());
+            solde += Decimal.Parse(value.ToString());
+            cmd = new SqlCommand("UPDATE COMPTE SET Sld = " + Double.Parse(solde.ToString()) + " WHERE NoCpt = '" + cpt + "'", con);
+            System.Diagnostics.Debug.WriteLine("CMD : " + cmd.CommandText);
             try
             {
                 nbLignes += cmd.ExecuteNonQuery();

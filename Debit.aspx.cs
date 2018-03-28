@@ -33,6 +33,14 @@ public partial class Debit : System.Web.UI.Page
         Double.TryParse(tbMontantDebit.Text, out value);
         String cpt = DropDownList1.SelectedValue;
         Decimal noCli;
+        if (value > 0)
+        {
+            lb_erreur.Visible = true;
+            lb_erreur.Text = "Le montant doit être négatif";
+            lb_erreur.ForeColor = System.Drawing.Color.Red;
+            System.Diagnostics.Debug.WriteLine("Le montant doit être négatif ");
+            Response.Redirect("./Debit.aspx");
+        }
         using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
         {
             con.Open();
@@ -49,16 +57,10 @@ public partial class Debit : System.Web.UI.Page
             cmd = new SqlCommand("SELECT Sld FROM COMPTE WHERE NoCpt = '" + cpt + "'", con);
             Decimal solde = (Decimal)cmd.ExecuteScalar();
 
-            solde -= (Decimal)value;
-            cmd = new SqlCommand("UPDATE COMPTE SET Sld = '" + solde + "' WHERE NoCpt = " + cpt, con);
-            System.Diagnostics.Debug.WriteLine("CMD : " + cmd);
-            try
-            {
-                nbLignes = cmd.ExecuteNonQuery();
-            } catch(SqlException se)
-            {
-                System.Diagnostics.Debug.WriteLine("SE : " + se.ToString());
-            }
+            solde += (Decimal)value;
+            cmd = new SqlCommand("UPDATE COMPTE SET Sld = " + Double.Parse(solde.ToString()) + " WHERE NoCpt = " + int.Parse(cpt), con);
+            System.Diagnostics.Debug.WriteLine("CMD : " + cmd.CommandText);
+            nbLignes = cmd.ExecuteNonQuery();
             System.Diagnostics.Debug.WriteLine("nb lignes : " + nbLignes);
             con.Close();
         }
