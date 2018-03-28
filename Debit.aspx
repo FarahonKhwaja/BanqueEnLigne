@@ -22,17 +22,16 @@
             <div id="contenu">
                 <hr />
 				<div id="padding">
-					<asp:Label ID="Label3" runat="server" Text="Débiter" Font-Size="Medium"></asp:Label>
-					<br />
-                    <asp:Label ID="lb_erreur" runat="server" Visible="False"></asp:Label>
+					<asp:Label ID="Label3" runat="server" Text="Débiter" Font-Size="Medium"></asp:Label>                    
                     <br />
 					<br />
-                    <br />
 					Compte à débiter : <asp:DropDownList ID="DropDownList1" runat="server" Height="24px" Width="130px"></asp:DropDownList>
 					<br /><br />
 					Montant à débiter : <asp:TextBox ID="tbMontantDebit" runat="server"></asp:TextBox>
                     <br /><br />
                     <asp:Button ID="Button1" runat="server" OnClick="btValiderDebit_Click" Text="Valider" style="height: 26px"  />
+                    <br /><br />
+                    <asp:Label ID="lb_erreur" runat="server" Visible="False"></asp:Label>
 				</div>
             </div>
             <!-- PIED DE LA PAGE -->
