@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -34,76 +35,32 @@ public partial class virer : System.Web.UI.Page
     protected void bt_valider_Click(object sender, EventArgs e)
     {
 
-        Double value = 0.0;
-        Double.TryParse(tb_montant.Text, out value);
-        String cpt = ddl_debiter.SelectedValue;
-        Decimal noCli;
-
-        //DEBITER
+        // connexion
         using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
         {
             con.Open();
-            using (SqlCommand commande = new SqlCommand("SELECT NoCli FROM UTILISATEUR WHERE LOGIN = @login", con))
-            {
-                commande.Parameters.AddWithValue("@login", Session["user"]);
-                noCli = (Decimal)commande.ExecuteScalar();
-            }
-            SqlCommand cmd = new SqlCommand("INSERT INTO OPERATION(LIB, DtOpe, TypO, Mnt, NoCpt, NoCli) " +
-                                            "VALUES ('débit du compte n°" + cpt + "', SYSDATETIME(), 'D', " + value +
-                                            "," + cpt + "," + noCli + ")", con);
-            int nbLignes = 0;
-            nbLignes = cmd.ExecuteNonQuery();
-            cmd = new SqlCommand("SELECT Sld FROM COMPTE WHERE NoCpt = '" + cpt + "'", con);
-            Decimal solde = (Decimal)cmd.ExecuteScalar();
 
-            solde -= (Decimal)value;
-            cmd = new SqlCommand("UPDATE COMPTE SET Sld = '" + solde + "' WHERE NoCpt = " + cpt, con);
-            System.Diagnostics.Debug.WriteLine("CMD : " + cmd);
             try
             {
-                nbLignes = cmd.ExecuteNonQuery();
-            }
-            catch (SqlException se)
-            {
-                System.Diagnostics.Debug.WriteLine("SE : " + se.ToString());
-            }
-            System.Diagnostics.Debug.WriteLine("nb lignes : " + nbLignes);
-            con.Close();
-        }
+                SqlCommand macommande = new SqlCommand("VIRER", con);
+                macommande.CommandType = CommandType.StoredProcedure;
 
-        //CREDITER
-        value = 0.0;
-        Double.TryParse(tb_montant.Text, out value);
-        cpt = ddl_crediter.SelectedValue;
-        noCli = 0;
-        using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
-        {
-            con.Open();
-            using (SqlCommand commande = new SqlCommand("SELECT NoCli FROM UTILISATEUR WHERE LOGIN = @login", con))
-            {
-                commande.Parameters.AddWithValue("@login", Session["user"]);
-                noCli = (Decimal)commande.ExecuteScalar();
+                macommande.Parameters.AddWithValue("@pNoCptDeb", ddl_debiter.SelectedValue);
+                macommande.Parameters.AddWithValue("@pNoCptCred", ddl_crediter.SelectedValue);
+                macommande.Parameters.AddWithValue("@pMnt", tb_montant.Text);
+
+                macommande.ExecuteNonQuery(); // INSERT, UPDATE, DELETE .... ; ExecuteQuery : Select  
+
+                Response.Redirect("./menu.aspx");
             }
-            SqlCommand cmd = new SqlCommand("INSERT INTO OPERATION(LIB, DtOpe, TypO, Mnt, NoCpt, NoCli) " +
-                                            "VALUES ('crédit du compte n°" + cpt + "', SYSDATETIME(), 'C', " + value +
-                                            "," + cpt + "," + noCli + ")", con);
-            int nbLignes = 0;
-            nbLignes = cmd.ExecuteNonQuery();
-            cmd = new SqlCommand("SELECT Sld FROM COMPTE WHERE NoCpt = '" + cpt + "'", con);
-            Decimal solde = (Decimal)cmd.ExecuteScalar();
-            cmd = new SqlCommand("UPDATE COMPTE SET Sld = '" + (solde + (Decimal)value) + "' WHERE NoCpt = '" + cpt + "'", con);
-            System.Diagnostics.Debug.WriteLine("CMD : " + cmd.ToString());
-            try
+            catch (Exception ex)
             {
-                nbLignes += cmd.ExecuteNonQuery();
+                lb_erreur.Visible = true;
+                lb_erreur.ForeColor = System.Drawing.Color.Red;
+                lb_erreur.Text = ex.Message.ToString();
             }
-            catch (SqlException se)
-            {
-                System.Diagnostics.Debug.WriteLine("SE : " + se.ToString());
-            }
-            System.Diagnostics.Debug.WriteLine("nb lignes : " + nbLignes);
+
             con.Close();
         }
-        Response.Redirect("./menu.aspx");
     }
 }

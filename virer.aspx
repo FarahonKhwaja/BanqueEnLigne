@@ -29,6 +29,8 @@
 					Montant à créditer : <asp:TextBox ID="tb_montant" runat="server"></asp:TextBox>
                     <br /><br />
 					<asp:Button ID="bt_valider" runat="server" OnClick="bt_valider_Click" Text="Valider" style="height: 26px" />
+                    <br /><br />
+                    <asp:Label ID="lb_erreur" runat="server" Visible="False"></asp:Label>
 				</div>
             </div>
             <!-- PIED DE LA PAGE -->
