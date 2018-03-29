@@ -34,8 +34,6 @@ public partial class virer : System.Web.UI.Page
 
     protected void bt_valider_Click(object sender, EventArgs e)
     {
-
-        // connexion
         using (SqlConnection con = new SqlConnection(Global.DatabaseConnexion))
         {
             con.Open();
@@ -49,7 +47,7 @@ public partial class virer : System.Web.UI.Page
                 macommande.Parameters.AddWithValue("@pNoCptCred", ddl_crediter.SelectedValue);
                 macommande.Parameters.AddWithValue("@pMnt", tb_montant.Text);
 
-                macommande.ExecuteNonQuery(); // INSERT, UPDATE, DELETE .... ; ExecuteQuery : Select  
+                macommande.ExecuteNonQuery();  
 
                 Response.Redirect("./menu.aspx");
             }
