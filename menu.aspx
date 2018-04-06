@@ -24,7 +24,7 @@
 					<asp:Label ID="Label3" runat="server" Text="Menu Principal" Font-Size="Medium"></asp:Label>
 					<br /><br />
 					Bonjour <%:Session["user"]%>
-					<br /><br />
+                    <br /><br />
 					<asp:LinkButton ID="lb_compte_courant" runat="server" OnCommand="lb_clic_liens" CommandName="bt_cpt_courant">Compte courant</asp:LinkButton> 
 					<asp:Label ID="lb_modif" runat="server" Text=""></asp:Label>
 					<br /><br />
@@ -38,9 +38,13 @@
                     <asp:LinkButton ID="lb_cred" runat="server" OnCommand="lb_clic_liens" CommandName="bt_credit">Créditer</asp:LinkButton><br />
                     <br />
                     <asp:LinkButton ID="lb_vir" runat="server" OnCommand="lb_clic_liens" CommandName="bt_virer">Virer</asp:LinkButton><br />
-                    </div>
+                    <br />
+                    <br />
+                    <asp:Label ID="lb_succes" runat="server" Visible="False"></asp:Label>
+                </div>
                 <div style="clear:both"></div>
                 <div>
+                    
                     <asp:GridView ID="GridViewCompteCourant" runat="server" style="z-index: 1; left: 207px; top: 202px; position: absolute"></asp:GridView>
                 </div>
 

@@ -57,10 +57,20 @@ public partial class credit : System.Web.UI.Page
                 macommande.CommandType = CommandType.StoredProcedure;
 
                 macommande.Parameters.AddWithValue("@pNoCpt", DropDownList2.SelectedValue);
-                macommande.Parameters.AddWithValue("@pMnt", tb1.Text);
 
-                macommande.ExecuteNonQuery(); // INSERT, UPDATE, DELETE .... ; ExecuteQuery : Select  
+                int parsedValue;
+                if (int.TryParse(tb1.Text, out parsedValue))
+                {
+                    macommande.Parameters.AddWithValue("@pMnt", tb1.Text);
+                } else
+                {
+                    macommande.Parameters.AddWithValue("@pMnt", DBNull.Value);
+                }
 
+
+                macommande.ExecuteNonQuery();
+
+                Session["Succes"] = "CreditOK";
                 Response.Redirect("./menu.aspx");
             }
             catch (Exception ex)

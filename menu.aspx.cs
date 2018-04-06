@@ -32,12 +32,37 @@ public partial class _Default : System.Web.UI.Page
                 GridViewCompteCourant.DataBind();
                 con.Close();
             }
+
+            Session.Remove("NoCpt");
+        }
+
+        if (Session["Succes"] != null)
+        {
+            lb_succes.Visible = true;
+            lb_succes.ForeColor = System.Drawing.Color.Green;
+
+            switch (Session["Succes"].ToString())
+            {
+                case "CreditOK":
+                    lb_succes.Text = "Crédit effectué avec succès";
+                    break;
+                case "DebitOK":
+                    lb_succes.Text = "Débit effectué avec succès";
+                    break;
+                case "VirementOK":
+                    lb_succes.Text = "Virement effectué avec succès";
+                    break;
+            }
+
+            Session.Remove("Succes");
         }
     }
 
     protected void lb_clic_liens(object sender, CommandEventArgs e)
     {
-        switch(e.CommandName)
+        lb_succes.Visible = false;
+
+        switch (e.CommandName)
         {
             case "bt_cpt_epargne":
                 lb_modif.Text = "Sélection compte épargne";
@@ -128,6 +153,7 @@ public partial class _Default : System.Web.UI.Page
 
     protected void clic_button(object sender, EventArgs e)
     {
+        lb_succes.Visible = false;
         Session.Remove("user");
         Response.Redirect("./accueil.aspx");
     }

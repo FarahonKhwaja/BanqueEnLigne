@@ -45,10 +45,21 @@ public partial class virer : System.Web.UI.Page
 
                 macommande.Parameters.AddWithValue("@pNoCptDeb", ddl_debiter.SelectedValue);
                 macommande.Parameters.AddWithValue("@pNoCptCred", ddl_crediter.SelectedValue);
-                macommande.Parameters.AddWithValue("@pMnt", tb_montant.Text);
 
-                macommande.ExecuteNonQuery();  
 
+                int parsedValue;
+                if (int.TryParse(tb_montant.Text, out parsedValue))
+                {
+                    macommande.Parameters.AddWithValue("@pMnt", tb_montant.Text);
+                }
+                else
+                {
+                    macommande.Parameters.AddWithValue("@pMnt", DBNull.Value);
+                }
+
+                macommande.ExecuteNonQuery();
+
+                Session["Succes"] = "VirementOK";
                 Response.Redirect("./menu.aspx");
             }
             catch (Exception ex)

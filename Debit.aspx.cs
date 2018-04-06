@@ -42,10 +42,20 @@ public partial class Debit : System.Web.UI.Page
                 macommande.CommandType = CommandType.StoredProcedure;
 
                 macommande.Parameters.AddWithValue("@pNoCpt", DropDownList1.SelectedValue);
-                macommande.Parameters.AddWithValue("@pMnt", tbMontantDebit.Text);
 
-                macommande.ExecuteNonQuery(); // INSERT, UPDATE, DELETE .... ; ExecuteQuery : Select  
+                int parsedValue;
+                if (int.TryParse(tbMontantDebit.Text, out parsedValue))
+                {
+                    macommande.Parameters.AddWithValue("@pMnt", tbMontantDebit.Text);
+                }
+                else
+                {
+                    macommande.Parameters.AddWithValue("@pMnt", DBNull.Value);
+                }
 
+                macommande.ExecuteNonQuery();
+
+                Session["Succes"] = "DebitOK";
                 Response.Redirect("./menu.aspx");
             } catch (Exception ex)
             {
